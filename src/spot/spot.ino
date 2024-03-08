@@ -3,7 +3,7 @@
 
 
 #include <GRGB.h>
-GRGB chip(COMMON_ANODE, Rp, Gp, Bp);
+GRGB chip(COMMON_CATHODE, Rp, Gp, Bp);
 
 // get temperature from the thermister
 float getTemp(int resistance);
@@ -15,7 +15,7 @@ void temperatureControl();
 
 
 void setup() {
-   Serial.begin(9600);
+  Serial.begin(9600);
   //analogReference(EXTERNAL);  // instal an external reference voltage source for sound processing
   // !!! processing of other signals may require modification!
 
@@ -67,9 +67,9 @@ void setup() {
 
 
 
- // pinMode(Rp, OUTPUT);
- // pinMode(Gp, OUTPUT);
- // pinMode(Bp, OUTPUT);
+  // pinMode(Rp, OUTPUT);
+  // pinMode(Gp, OUTPUT);
+  // pinMode(Bp, OUTPUT);
 
   pinMode(fan_p, OUTPUT);
 
@@ -80,12 +80,19 @@ void setup() {
 
 
   chip.setBrightness(255);
- // chip.setRGB(100, 50, 0);
+  //chip.setRGB(0, 50, 0);
 }
 
 void loop() {
   temperatureControl();
   parseSerial();
+
+  // static uint32_t tmr{};
+  // if (millis() - tmr >= 200) {
+  //   static uint8_t value{};
+  //   chip.setWheel8(value++);
+  //   tmr = millis();
+  // }
 }
 
 // temperature from the thermistor
@@ -109,6 +116,7 @@ void temperatureControl() {
     // analogReference(DEFAULT);
     float temp = getTemp(analogRead(therm_p));
     //  analogReference(EXTERNAL);
+    //Serial.println(temp);
 
     //if (temp >= 47) settings.mode = 0;
     if (temp >= critTemp) {
